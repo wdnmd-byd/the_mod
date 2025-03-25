@@ -1,5 +1,16 @@
 {
-  "variants": {
-    "": { "model": "your_mod_id:block/your_block" }
-  }
+  "multipart": [
+    {
+      "when": { "armed": false },
+      "apply": {
+        "model": "the-mod:block/cfour_unlit"
+      }
+    },
+    {
+      "when": { "armed": true },
+      "apply": {
+        "model": "the-mod:block/cfour_lit"
+      }
+    }
+  ]
 }

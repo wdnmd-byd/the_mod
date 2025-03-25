@@ -1,0 +1,15 @@
+{
+  "multipart": [
+    {
+      "when": { "powered": false },
+      "apply": {
+        "model": "the-mod:block/wire_off",
+        "predicate": { "power": 0 }
+      }
+    },
+    {
+      "when": { "powered": true },
+      "apply": { "model": "the-mod:block/wire_on" }
+    }
+  ]
+}

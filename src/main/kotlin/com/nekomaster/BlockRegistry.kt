@@ -11,5 +11,10 @@ object BlockRegistry {
             Identifier("the-mod", "cfour"),
             ModBlocks.C4_BLOCK
         )
+        Registry.register(
+            Registries.BLOCK,
+            Identifier("the-mod", "wire"),
+            ModBlocks.WIRE_BLOCK
+        )
     }
 }
