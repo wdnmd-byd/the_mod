@@ -28,13 +28,6 @@
 			}
 		]
 	},
-	"mixins": [
-		"the-mod.mixins.json",
-		{
-			"config": "the-mod.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.16.10",
 		"minecraft": "~1.20.1",

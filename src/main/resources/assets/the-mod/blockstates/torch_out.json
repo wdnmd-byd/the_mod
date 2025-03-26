@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "the-mod:block/torch_out" }
+  }
+}

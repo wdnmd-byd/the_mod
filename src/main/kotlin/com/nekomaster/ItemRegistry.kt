@@ -1,5 +1,6 @@
 package com.nekomaster
 
+import com.nekomaster.items.TimerItem
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.BlockItem
 import net.minecraft.registry.Registries
@@ -12,6 +13,21 @@ object ItemRegistry {
             Registries.ITEM,
             Identifier("the-mod", "cfour"),
             BlockItem(ModBlocks.C4_BLOCK, FabricItemSettings())
+        )
+        Registry.register(
+            Registries.ITEM,
+            Identifier("the-mod", "wire"),
+            BlockItem(ModBlocks.WIRE_BLOCK, FabricItemSettings())
+        )
+        Registry.register(
+            Registries.ITEM,
+            Identifier("the-mod", "timer"),
+            ModItems.TIMER
+        )
+        Registry.register(
+            Registries.ITEM,
+            Identifier("the-mod", "detonator"),
+            ModItems.DETONATOR
         )
     }
 }

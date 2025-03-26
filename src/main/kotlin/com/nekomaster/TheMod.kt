@@ -1,8 +1,8 @@
 package com.nekomaster
 
 import com.nekomaster.events.DiamondExplode
+import com.nekomaster.functions.TorchBurnout
 import net.fabricmc.api.ModInitializer
-import net.minecraft.block.Block
 import org.slf4j.LoggerFactory
 
 object TheMod : ModInitializer {
@@ -12,5 +12,6 @@ object TheMod : ModInitializer {
 		DiamondExplode.register()
 		ItemRegistry.reg()
 		BlockRegistry.reg()
+		TorchBurnout.init()
 	}
 }
