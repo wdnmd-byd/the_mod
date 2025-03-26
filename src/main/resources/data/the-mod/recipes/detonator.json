@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "GSG",
+    " P "
+  ],
+  "key": {
+    "R": { "item": "minecraft:redstone" },
+    "G": { "item": "minecraft:gunpowder" },
+    "S": { "item": "minecraft:stick" },
+    "P": { "item": "minecraft:iron_ingot" }
+  },
+  "result": {
+    "item": "the-mod:detonator",
+    "count": 2
+  }
+}

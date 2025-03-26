@@ -1,5 +1,6 @@
 package com.nekomaster
 
+import com.nekomaster.items.DetonatorItem
 import com.nekomaster.items.TimerItem
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.Item
@@ -13,5 +14,8 @@ object ModItems {
     val TIMER = TimerItem(FabricItemSettings()
         .maxCount(1)
         .rarity(Rarity.UNCOMMON)
+    )
+    val DETONATOR = DetonatorItem(FabricItemSettings()
+        .maxCount(16)
     )
 }

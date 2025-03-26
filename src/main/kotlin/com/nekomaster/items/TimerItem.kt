@@ -13,7 +13,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -21,6 +20,7 @@ import java.util.WeakHashMap
 
 class TimerItem(settings: Settings) : Item(settings) {
     private val boundC4Map = WeakHashMap<PlayerEntity, BlockPos?>()
+
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
         val world = context.world
         val pos = context.blockPos
@@ -28,7 +28,7 @@ class TimerItem(settings: Settings) : Item(settings) {
         val state = world.getBlockState(pos)
         if (state.block !is C4Block) return ActionResult.PASS
         if (!world.isClient) {
-            // 检查是否已武装
+            // Check if already armed
             if (state.get(C4Block.ARMED)) {
                 player?.sendMessage(
                     Text.literal("Timer already installed")
@@ -38,15 +38,15 @@ class TimerItem(settings: Settings) : Item(settings) {
                 return ActionResult.FAIL
             }
 
-            // 绑定到当前C4
+            // Bind to current C4
             boundC4Map[player] = pos
             player?.sendMessage(
-                Text.literal("成功绑定C4到位置: (${pos.x}, ${pos.y}, ${pos.z})")
+                Text.literal("Successfully bound C4 to position: (${pos.x}, ${pos.y}, ${pos.z})")
                     .formatted(Formatting.GREEN),
                 true
             )
 
-            // 播放安装音效
+            // Play installation sound
             world.playSound(
                 null,
                 pos,
@@ -65,10 +65,10 @@ class TimerItem(settings: Settings) : Item(settings) {
         val boundPos = boundC4Map[user]
 
         if (user.isSneaking) {
-            // Shift+右键解除绑定
+            // Shift+right-click to unbind
             boundC4Map.remove(user)
             user.sendMessage(
-                Text.literal("已解除C4绑定").formatted(Formatting.GOLD),
+                Text.literal("C4 unbound").formatted(Formatting.GOLD),
                 true
             )
             return TypedActionResult.success(stack)
@@ -76,7 +76,7 @@ class TimerItem(settings: Settings) : Item(settings) {
 
         if (boundPos == null) {
             user.sendMessage(
-                Text.literal("你他妈还没绑定C4呢！").formatted(Formatting.RED),
+                Text.literal("No C4 bound!").formatted(Formatting.RED),
                 true
             )
             return TypedActionResult.fail(stack)
@@ -85,62 +85,35 @@ class TimerItem(settings: Settings) : Item(settings) {
         if (!world.isClient) {
             val state = world.getBlockState(boundPos)
 
-            // 再次确认是C4方块且未被激活
-            if (state.block !is C4Block || state.get(C4Block.ARMED)) {
+            // Confirm it's a C4 block and armed
+            if (state.block !is C4Block || !state.get(C4Block.ARMED)) {
                 user.sendMessage(
-                    Text.literal("绑定的C4无效或已激活！").formatted(Formatting.RED),
+                    Text.literal("Bound C4 is invalid or not armed!").formatted(Formatting.RED),
                     true
                 )
                 boundC4Map.remove(user)
                 return TypedActionResult.fail(stack)
             }
 
-            // 激活C4倒计时
-            world.setBlockState(
-                boundPos,
-                state.with(C4Block.ARMED, true)
-            )
+            // Trigger explosion
+            (state.block as C4Block).explode(world, boundPos)
 
-            // 10秒倒计时 (20 ticks/sec)
-            (world as? ServerWorld)?.let { serverWorld ->
-                serverWorld.scheduleBlockTick(
-                    boundPos,
-                    state.block,
-                    200
-                )
-            }
-
-            // 播放激活音效
-            world.playSound(
-                null,
-                boundPos,
-                SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
-                SoundCategory.BLOCKS,
-                1f,
-                2f
-            )
-
-            // 消耗物品 (非创造模式)
-            if (!user.isCreative) {
-                stack.decrement(1)
-            }
-
-            // 解除绑定
+            // Unbind
             boundC4Map.remove(user)
         }
 
         return TypedActionResult.success(stack)
     }
 
-    // 添加物品描述
+    // Add item description
     override fun appendTooltip(
         stack: ItemStack,
         world: World?,
         tooltip: MutableList<Text>,
-        context: TooltipContext
+        context: TooltipContext?
     ) {
-        tooltip.add(Text.literal("右键点击C4方块进行绑定").formatted(Formatting.GRAY))
-        tooltip.add(Text.literal("再次右键启动10秒倒计时").formatted(Formatting.GRAY))
-        tooltip.add(Text.literal("Shift+右键解除绑定").formatted(Formatting.DARK_GRAY))
+        tooltip.add(Text.literal("Right-click on C4 block to bind").formatted(Formatting.GRAY))
+        tooltip.add(Text.literal("Right-click again to trigger explosion").formatted(Formatting.GRAY))
+        tooltip.add(Text.literal("Shift+right-click to unbind").formatted(Formatting.DARK_GRAY))
     }
 }

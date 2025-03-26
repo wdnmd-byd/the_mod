@@ -24,5 +24,10 @@ object ItemRegistry {
             Identifier("the-mod", "timer"),
             ModItems.TIMER
         )
+        Registry.register(
+            Registries.ITEM,
+            Identifier("the-mod", "detonator"),
+            ModItems.DETONATOR
+        )
     }
 }

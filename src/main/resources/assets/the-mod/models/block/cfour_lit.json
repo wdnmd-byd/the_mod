@@ -1,6 +1,6 @@
 {
-  "parent": "block/cube",
+  "parent": "block/cube_all",
   "textures": {
-    "all" : "the-mod:block/cfour_lit"
+    "all": "the-mod:block/cfour_lit"
   }
 }
