@@ -1,0 +1,6 @@
+{
+  "parent": "block/template_wall_torch",
+  "textures": {
+    "torch": "the-mod:block/torch_out"
+  }
+}
